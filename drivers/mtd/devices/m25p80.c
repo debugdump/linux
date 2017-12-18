@@ -307,6 +307,11 @@ static int m25p_remove(struct spi_device *spi)
 {
 	struct m25p	*flash = spi_get_drvdata(spi);
 
+    flash->command[0] = 0x66;  
+    spi_write(flash->spi, flash->command, 1);  
+    flash->command[0] = 0x99;  
+    spi_write(flash->spi, flash->command, 1);  
+
 	/* Clean up MTD stuff. */
 	return mtd_device_unregister(&flash->spi_nor.mtd);
 }
@@ -385,7 +390,7 @@ static struct spi_driver m25p80_driver = {
 	.id_table	= m25p_ids,
 	.probe	= m25p_probe,
 	.remove	= m25p_remove,
-
+	.shutdown = m25p_remove,
 	/* REVISIT: many of these chips have deep power-down modes, which
 	 * should clearly be entered on suspend() to minimize power use.
 	 * And also when they're otherwise idle...
