@@ -208,6 +208,14 @@
 			#dma-cells = <1>;
 		};
 
+		pwm: pwm@01c21400 {
+				    compatible = "allwinner,sun7i-a20-pwm";		//这里选a20是因为v3s和a20一样有两路pwm
+				    reg = <0x01c21400 0xC>;
+				    clocks = <&osc24M>;
+				    #pwm-cells = <3>;
+				    status = "okay";
+			};
+
 		mmc0: mmc@01c0f000 {
 			compatible = "allwinner,sun7i-a20-mmc";
 			reg = <0x01c0f000 0x1000>;
@@ -383,6 +391,12 @@
 				pins = "PC0", "PC1", "PC2", "PC3";
 				function = "spi0";
 			};
+
+			pwm0_pins: pwm0 {
+					pins = "PB4";
+					function = "pwm0";
+			};
+
 		};
 
 		timer@01c20c00 {
