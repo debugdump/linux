@@ -81,6 +81,7 @@
 	status = "okay";
 };
 
+/*
 &mmc0 {
 	pinctrl-0 = <&mmc0_pins_a>;
 	pinctrl-names = "default";
@@ -89,6 +90,7 @@
 	vmmc-supply = <&reg_vcc3v3>;
 	status = "okay";
 };
+*/
 
 &i2c0 {
 	status = "okay";
