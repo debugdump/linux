@@ -100,6 +100,25 @@ void swap1(u16 *xp, u16 *yp)
     *yp = temp;
 }
 
+// Two-pass algorithm:
+//   http://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Two-pass_algorithm
+u16 variance(u16 v[], size_t n)
+{
+    uint32_t mean = 0;
+    uint32_t ssd = 0;
+
+	int i;
+    for (i = 0; i < n; i++) {
+        mean += v[i];
+    }
+    mean /= n;
+
+    for (i = 0; i < n; i++) {
+        ssd += (v[i] - mean) * (v[i] - mean);
+    }
+    return (u16)(ssd / (n));
+}
+
 // A function to implement bubble sort
 void bubbleSort(u16 arr[], int n)
 {
@@ -114,13 +133,13 @@ void bubbleSort(u16 arr[], int n)
 
 static unsigned long last_jiffies = 0;
 static u16 last_x, last_y, distance;
-#define TOUCH_COUNT_TOTAL    5
-#define TOUCH_COUNT_VALID    3
+#define TOUCH_COUNT_TOTAL    6
+#define TOUCH_COUNT_VALID    4
 static int ns2009_ts_report(struct ns2009_data *data)
 {
 	u16 x, y, z1[9], x1[TOUCH_COUNT_TOTAL], y1[TOUCH_COUNT_TOTAL], i, count, count2, x_sum, y_sum;
 	int ret;
-
+	u16 var_x=0, var_y =0;
 	/*
 	 * NS2009 chip supports pressure measurement, but currently it needs
 	 * more investigation, so we only use z1 axis to detect pen down
@@ -180,6 +199,20 @@ static int ns2009_ts_report(struct ns2009_data *data)
 			return -1;
 		}
 
+		var_x = variance(x1, count);
+		var_y = variance(y1, count);
+
+		printk("var_x=%d, var_y=%d", var_x, var_y);
+
+		if((var_x > 800) || (var_y > 800))
+		{
+			printk("!!!!!!!!!error var report!!!!!!! var_x=%d, var_y=%d", var_x, var_y);
+			printk("!!!!!!!!!error var report!!!!!!! var_x=%d, var_y=%d", var_x, var_y);
+			printk("!!!!!!!!!error var report!!!!!!! var_x=%d, var_y=%d", var_x, var_y);
+			return -1;
+		}
+
+		
 		bubbleSort(x1, count);
 		bubbleSort(y1, count);
 		x_sum = 0;
