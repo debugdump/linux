@@ -164,9 +164,9 @@ static int ns2009_ts_report(struct ns2009_data *data)
 			ns2009_ts_read_data(data, NS2009_READ_X_LOW_POWER_12BIT, &x1[count]);
 			ns2009_ts_read_data(data, NS2009_READ_Y_LOW_POWER_12BIT, &y1[count]);
 
-			if ((x1[count] > 3900) || (y1[count] > 3900))
+			if ((x1[count] > 4905) || (y1[count] > 4905))
 			{
-				printk(" > 3900 break");
+				printk(" > 4905 break");
 				//return -3;
 				break;
 			}
